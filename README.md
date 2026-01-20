@@ -1,6 +1,6 @@
 # nvim-config
 
-### Install External Dependencies
+### External Dependencies
 
 External Requirements:
 - `git`
@@ -10,12 +10,11 @@ External Requirements:
 - [ripgrep](https://github.com/BurntSushi/ripgrep#installation)
 - [fd-find](https://github.com/sharkdp/fd#installation)
 
-### Install Kickstart
+Install a [Nerd Font](https://www.nerdfonts.com/font-downloads)
+
+### Install
 
 Backup your previous configuration (if any exists)
-| Linux, MacOS | `$XDG_CONFIG_HOME/nvim`, `~/.config/nvim` |
-
-#### Recommended Step
 
 ```sh
 git clone https://github.com/seb-updoc/nvim-config.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
