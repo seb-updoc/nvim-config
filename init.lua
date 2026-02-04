@@ -5,6 +5,7 @@ vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
 vim.opt.colorcolumn = '80,99'
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -78,6 +79,18 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.hl.on_yank()
   end,
 })
+
+-- [[ Updoc Integrant ]]
+local function reset_integrant()
+  vim.cmd [[ConjureEval (integrant.repl/reset)]]
+end
+
+local function run_tests()
+  vim.cmd [[ConjureEval (clojure.test/run-all-tests #"updoc.+\.test")]]
+end
+
+vim.keymap.set('n', '<localleader>kr', reset_integrant, { noremap = true, silent = true, desc = 'Integrant reset' })
+vim.keymap.set('n', '<localleader>kt', run_tests, { noremap = true, silent = true, desc = 'Run tests' })
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -496,11 +509,7 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        clojure = { 'zprint' },
       },
     },
   },
@@ -638,6 +647,9 @@ require('lazy').setup({
         return '%2l:%-2v'
       end
 
+      statusline.section_git = function()
+        return ''
+      end
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
@@ -668,6 +680,11 @@ require('lazy').setup({
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
 
+  -- [[ Updoc plugins ]]
+  { 'Olical/conjure' },
+  { 'eraserhd/parinfer-rust', run = 'cargo build --release' },
+  { 'Grazfather/sexp.nvim', config = true },
+
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
@@ -680,7 +697,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
